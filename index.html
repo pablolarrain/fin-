@@ -329,32 +329,58 @@ En Chile el término ha sido utilizado por el mundo socio ambiental para mencion
             </div>
         </div>
         <!--JavaScript para el <canvas></canvas>, simplificado con p5.js-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+        
         <script>
-            // parto creando tres variables
-            var box = document.querySelector("#p5");
-            var w = box.clientWidth;
-            var h = (w / 16) * 9;
-            // defino una altura
-            box.style.color = h + "px";
-            // en caso quieran asomarse a la consola
-            console.log(w);
-            console.log(h);
-            // comenzamos con p5.js
-            function setup() {
-                var canvas = createCanvas(w, h);
-                canvas.parent("#p5");
-            }
+         document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+    }, false);
 
-            function draw() {
-                background(200);
-                fill(0);
-                ellipse(mouseX, mouseY, 50, 50);
-            }
+var black;
+var alphaC;
+var layer;
+var rad = 100;
 
-            function windowResized() {
-                resizeCanvas(w, h);
-            }
+var w = 600, h = 600;
+
+var mouseIsDragged = false;
+ 
+
+
+function setup() {
+  pixelDensity(1);
+  createCanvas(w, h);
+  black = color(155);
+  alphaC = color(0,0);
+  layer = createGraphics(w, h);
+  bg = loadImage('https://upload.wikimedia.org/wikipedia/en/4/4d/Shrek_%28character%29.png');
+  layer.fill(222);
+  layer.rect(0,0,width,height);
+}
+ 
+function draw() {
+  noStroke();
+  background(bg);
+  image(layer, 0, 0);
+  
+  if (mouseIsPressed) {
+    noFill();
+    stroke("red");
+    ellipse(mouseX, mouseY, rad*2, rad*2);
+    line(mouseX - 10, mouseY, mouseX+10, mouseY);
+    line(mouseX, mouseY-10, mouseX, mouseY+10);
+  }
+}
+
+function mouseDragged() {
+  for (var x = mouseX - rad; x < mouseX+rad; x++) {
+    for (var y = mouseY - rad; y < mouseY+rad; y++) {
+      if ((dist(x,y, mouseX, mouseY) < rad) && x > 0 && x <= width) {
+        layer.set(x,y,alphaC);
+      }
+    }
+  }
+  layer.updatePixels();
+}
         </script>
         <!--JavaScript para los 286 feather icons - https://feathericons.com/-->
         <script src="https://unpkg.com/feather-icons"></script>
